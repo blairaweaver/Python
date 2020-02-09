@@ -1,1 +1,43 @@
 There are days missing b/c the stock market isn't opened on the weekends
+
+
+        # print(index)
+        # print(data.at[index, 'date'])
+                    # print(data.at[index - 1, 'date'])
+            # print(data.at[index, 'close'])
+            # print(data.at[index - 1, 'close'])
+                    # print(temp)
+            # print(float(temp))
+            temp2 = -0.005555555555555
+            # print(temp)
+            # print(type(temp))
+            # print(type(temp2))
+            # print(type(float(temp)))
+            # temp3 = round(temp, 7)
+            # print(type(temp3))
+
+            # print(May.shape)
+# print(May.info())
+# print(May.head())
+
+# print(May.shape)
+# print(May.info())
+# print(May.head())
+
+
+# print("{:.6f}".format(May.at[500, 'diff']))
+#
+# with pd.option_context('display.float_format', '{:0.20f}'.format):
+#     print(May.head())
+
+#
+# May25 = May[May['day'] == dt.date(year=2019, month=5, day=11)]
+#
+# print(May25)
+#
+# for i in range(1, 31):
+#     temp = May[May['day'] == dt.date(year=2019, month=5, day=i)]
+#     print(i)
+#     print(temp.empty)
+#     if not temp.empty:
+#         print(temp.tail())
