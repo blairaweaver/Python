@@ -21,17 +21,15 @@ def updateDF(data):
     for d in data['date']:
         data['day'] = dt.datetime.date(d)
         data['time'] = dt.datetime.time(d)
-        data['diff'] = 1.000000005
-        data.to_numpy()
 
     print(data.info())
     for index, row in data.iterrows():
         if not index == 0:
-            temp = data.at[index, 'close']
-            temp2 = data.at[index - 1, 'close']
-            print(round(temp - temp2, 4))
-
-            data['diff'] = round(temp - temp2, 4)
+            temp = float(data.at[index, 'close'])
+            print(temp)
+            temp2 = float(data.at[index - 1, 'close'])
+            temp3 = str(temp2 - temp)
+            data['diff'] = temp3
 
 
 May = importFile("1905hfp.csv")
