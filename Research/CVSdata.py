@@ -26,11 +26,12 @@ def updateDF(data):
     for index, row in data.iterrows():
         if not index == 0:
             temp = float(data.at[index, 'close'])
-            print(temp)
+            # print(temp)
             temp2 = float(data.at[index - 1, 'close'])
-            temp3 = str(temp2 - temp)
-            data['diff'] = temp3
-
+            # print(temp2-temp)
+            # temp3 = str(temp2 - temp)
+            # data['diff'] = temp2 - temp
+            data.at[index, 'diff'] = temp2 - temp
 
 May = importFile("1905hfp.csv")
 May.to_csv('AfterImport.csv')
