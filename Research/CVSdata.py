@@ -18,31 +18,35 @@ def makeDate(data):
 
 
 def updateDF(data):
-    for d in data['date']:
-        data['day'] = dt.datetime.date(d)
-        data['time'] = dt.datetime.time(d)
-
-    print(data.info())
     for index, row in data.iterrows():
+        data.at[index, 'day'] = dt.datetime.date(row['date'])
+        data.at[index, 'time'] = dt.datetime.time(row['date'])
         if not index == 0:
             temp = float(data.at[index, 'close'])
-            # print(temp)
             temp2 = float(data.at[index - 1, 'close'])
-            # print(temp2-temp)
-            # temp3 = str(temp2 - temp)
-            # data['diff'] = temp2 - temp
             data.at[index, 'diff'] = temp2 - temp
 
-May = importFile("1905hfp.csv")
-May.to_csv('AfterImport.csv')
-
-May = makeDate(May)
-
-updateDF(May)
-print(May.head())
-
-print(May.info())
+for i in range(5,11):
+    temp = importFile("19{:02d}hfp.csv".format(i))
+    temp = makeDate(temp)
+    updateDF(temp)
+    temp.to_csv("test{:02d}.csv".format(i))
+    # print(i)
+    # print(temp.head())
 
 
-May.to_csv('test.csv')
-
+# oct = importFile("1910hfp.csv")
+# oct = makeDate(oct)
+# May = importFile("1905hfp.csv")
+# May.to_csv('AfterImport.csv')
+#
+# May = makeDate(May)
+#
+# updateDF(May)
+# print(May.head())
+#
+# print(May.info())
+#
+#
+# May.to_csv('test.csv')
+#
