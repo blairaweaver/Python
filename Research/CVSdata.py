@@ -30,6 +30,8 @@ for i in range(5,11):
     temp = importFile("19{:02d}hfp.csv".format(i))
     temp = makeDate(temp)
     updateDF(temp)
+    temp_sort = temp.sort_values('close', ascending=False)
+    temp_sort.to_csv("test{:02d}sort.csv".format(i))
     temp.to_csv("test{:02d}.csv".format(i))
     # print(i)
     # print(temp.head())
