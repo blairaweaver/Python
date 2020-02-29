@@ -2,6 +2,7 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 import os
+import calendar as cal
 
 
 # pd.options.display.precision
@@ -28,37 +29,86 @@ def updateDF(data):
             data.at[index, 'diff'] = temp2 - temp
 
 # This can open all the files at once and does some data processing
-# for i in range(5,11):
-#     temp = importFile("19{:02d}hfp.csv".format(i))
-#     temp = makeDate(temp)
-#     updateDF(temp)
-#     temp_sort = temp.sort_values('close', ascending=False)
-#     temp_sort.to_csv("test{:02d}sort.csv".format(i))
-#     temp.to_csv("test{:02d}.csv".format(i))
+for i in range(5,11):
+    temp = importFile("19{:02d}hfp.csv".format(i))
+    temp = makeDate(temp)
+    updateDF(temp)
+    # temp_sort = temp.sort_values('close', ascending=False)
+    # temp_sort.to_csv("test{:02d}sort.csv".format(i))
+    # temp.to_csv("test{:02d}.csv".format(i))
+    # Cycle through all the days in the month
+    for j in range(1, cal.monthrange(2019, i)[1] + 1):
+        # if weekend, skip to next day (doesn't catch holidays :'( )
+        if(dt.date(2019, i, j).weekday() >= 5):
+            continue
+        print(dt.date(2019, i, j))
+        DayValues = temp[temp['day'] == dt.date(2019, i, j)]
+        # Checks for holidays
+        if DayValues.empty:
+            continue
+        print(DayValues.head())
+        DayMaxValues = DayValues[DayValues['close'] == DayValues['close'].max()]
+        DaySegments = []
+        endindex = DayValues.last_valid_index()
+        for idx in reversed(DayMaxValues.index):
+            DaySegments.append(DayValues.iloc[idx:endindex, :])
+            endindex = idx - 1
+        if endindex > DayValues.index[0]:
+            # df.at[4, 'B']
+            print(DayValues.iloc[0:endindex, :])
+            DaySegments.append(DayValues.iloc[0:endindex, :])
+        for x in (0, len(DaySegments) - 1):
+            DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
+
+
 # print(i)
 # print(temp.head())
+# for i in range(5,11):
+#     for j in range(1, cal.monthrange(2019, i)[1] + 1):
+#         print(dt.date(2019, i, j))
+#         print(dt.date(2019, i, j).weekday() >= 5)
 
 
 # oct = importFile("1910hfp.csv")
 # oct = makeDate(oct)
-May = importFile("fakedata.csv")
+
 # May.to_csv('AfterImport.csv')
 
-May = makeDate(May)
+# From this comment to the Comment labeled "STOP" does the segmentation on fakedate file
+# May = importFile("fakedata.csv")
+# May = makeDate(May)
+#
+# updateDF(May)
+#
+# May_Day1 = May[May['day'] == dt.date(2019, 5, 2)]
+# print(May_Day1.head())
+# print(May_Day1.max())
+# print(May_Day1['close'].max())
+# May_Day1_Max = May_Day1[May_Day1['close']==May_Day1['close'].max()]
+# print(May_Day1_Max.head())
 
-updateDF(May)
-May_Day1 = May[May['day'] == dt.date(2019, 5, 1)]
-print(May_Day1.head())
-print(May_Day1.max())
-print(May_Day1['close'].max())
-May_Day1_Max = May_Day1[May_Day1['close']==May_Day1['close'].max()]
-print(May_Day1_Max.head())
+# Day1Segments = []
+# endindex = May_Day1.last_valid_index()
+# for idx in reversed(May_Day1_Max.index):
+#     # print(endindex)
+#     # print(idx)
+#     # print(May_Day1_Max.at[idx, 'time'])
+#     print("{0}, {1}".format(idx, endindex))
+#     # print(May_Day1.iloc[idx:endindex, :])
+#     Day1Segments.append(May_Day1.iloc[idx:endindex, :])
+#     endindex = idx - 1
+# print(endindex)
+# print(May_Day1.index[0])
+# print(May_Day1.index)
+# if endindex > May_Day1.index[0]:
+#     # print(May_Day1.iloc[0:endindex, :])
+#     Day1Segments.append(May_Day1.iloc[0:endindex, :])
 
+# print(Day1Segments[-1].head())
+# print(May_Day1['date'].iloc[-1])
+# print(May_Day1.last_valid_index())
 
-for idx in reversed(May_Day1_Max.index):
-    print(idx)
-    print(May_Day1_Max.at[idx, 'time'])
-
+# "STOP"
 
 # This sort doesn't preserve the time sort.
 # May_Day1_sort = May_Day1.sort_values('close', ascending=False)
