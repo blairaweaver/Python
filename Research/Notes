@@ -1,10 +1,6 @@
 There are days missing b/c the stock market isn't opened on the weekends
 
-The current code might be leaving out the max
-Need to modify the check to see if there is a segment at the beginning since the index is based on month and it might only be 0 on the first day
-    I believe this problem is fixed, but need to verify
-I have an off my one error I believe in saving the records.
-Also, verify the max that is being returned by the max() function
+Need to plot the data and then save the plots
 
 
         # print(index)
