@@ -3,6 +3,7 @@ import datetime as dt
 import numpy as np
 import os
 import calendar as cal
+import matplotlib.pyplot as plt
 
 
 # pd.options.display.precision
@@ -29,17 +30,17 @@ def updateDF(data):
             data.at[index, 'diff'] = temp2 - temp
 
 # This can open all the files at once and does some data processing
-for i in range(5,11):
+for i in range(5, 11):
     fullData = importFile("19{:02d}hfp.csv".format(i))
     fullData = makeDate(fullData)
     updateDF(fullData)
-#     temp_sort = temp.sort_values('close', ascending=False)
-#     temp_sort.to_csv("test{:02d}sort.csv".format(i))
-#     temp.to_csv("test{:02d}.csv".format(i))
-#     Cycle through all the days in the month
+    #     temp_sort = temp.sort_values('close', ascending=False)
+    #     temp_sort.to_csv("test{:02d}sort.csv".format(i))
+    #     temp.to_csv("test{:02d}.csv".format(i))
+    #     Cycle through all the days in the month
     for j in range(1, cal.monthrange(2019, i)[1] + 1):
         # if weekend, skip to next day (doesn't catch holidays :'( )
-        if(dt.date(2019, i, j).weekday() >= 5):
+        if (dt.date(2019, i, j).weekday() >= 5):
             continue
         print(dt.date(2019, i, j))
         DayValues = fullData[fullData['day'] == dt.date(2019, i, j)]
@@ -62,8 +63,14 @@ for i in range(5,11):
             print(DayValues.iloc[0:endindex, :])
             DaySegments.append(DayValues.iloc[0:endindex, :])
         for x in range(0, len(DaySegments)):
-            DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
-
+            # DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
+            # DaySegments[x].plot(x = 'time', y = 'close', kind = 'line')
+            # plt.savefig("test{:02d}_{:02d}_{:02d}.png".format(i, j, len(DaySegments) - x))
+            plt.plot_date(DaySegments[x]['time'], DaySegments[x]['close'])
+            plt.savefig("test{:02d}_{:02d}_{:02d}_scatter.png".format(i, j, len(DaySegments) - x))
+            plt.close()
+            # plt.show()
+            # print()
 
 # print(i)
 # print(temp.head())
