@@ -1,0 +1,13 @@
+Is the confusion matrix in the sklearn.metrics good enough?
+
+Why do my predictions vary wildly?
+    will have model predict all negative (all features) or all positive (occupation)
+
+To Do
+    Cross val
+    Play with model
+        Learning rate
+        regularization params
+    plot learning rate and regularization params vs accuracy
+
+    plot decision boundary? final model
