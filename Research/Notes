@@ -1,6 +1,7 @@
 There are days missing b/c the stock market isn't opened on the weekends
 
 Need to plot the data and then save the plots
+What about days that have one point before the Max?
 
 
         # print(index)

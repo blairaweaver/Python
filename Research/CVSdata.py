@@ -63,9 +63,10 @@ for i in range(5, 11):
             print(DayValues.iloc[0:endindex, :])
             DaySegments.append(DayValues.iloc[0:endindex, :])
         for x in range(0, len(DaySegments)):
-            # DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
-            # DaySegments[x].plot(x = 'time', y = 'close', kind = 'line')
-            # plt.savefig("test{:02d}_{:02d}_{:02d}.png".format(i, j, len(DaySegments) - x))
+            DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
+            DaySegments[x].plot(x = 'time', y = 'close', kind = 'line')
+            plt.savefig("test{:02d}_{:02d}_{:02d}.png".format(i, j, len(DaySegments) - x))
+            plt.close()
             plt.plot_date(DaySegments[x]['time'], DaySegments[x]['close'])
             plt.savefig("test{:02d}_{:02d}_{:02d}_scatter.png".format(i, j, len(DaySegments) - x))
             plt.close()
