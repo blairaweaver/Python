@@ -28,48 +28,60 @@ def updateDF(data):
             temp = float(data.at[index, 'close'])
             temp2 = float(data.at[index - 1, 'close'])
             data.at[index, 'diff'] = temp2 - temp
+        else:
+            data.at[index, 'diff'] = 0
+
+def checkDirection(direction, diff):
+    return (direction > 0 and diff > 0) or (direction < 0 and diff < 0)
+
+# do I need to check for 0?
+def setDirection(diff):
+    if diff > 0:
+        return 1
+    else:
+        return -1
 
 # This can open all the files at once and does some data processing
-for i in range(5, 11):
-    fullData = importFile("19{:02d}hfp.csv".format(i))
-    fullData = makeDate(fullData)
-    updateDF(fullData)
-    #     temp_sort = temp.sort_values('close', ascending=False)
-    #     temp_sort.to_csv("test{:02d}sort.csv".format(i))
-    #     temp.to_csv("test{:02d}.csv".format(i))
-    #     Cycle through all the days in the month
-    for j in range(1, cal.monthrange(2019, i)[1] + 1):
-        # if weekend, skip to next day (doesn't catch holidays :'( )
-        if (dt.date(2019, i, j).weekday() >= 5):
-            continue
-        print(dt.date(2019, i, j))
-        DayValues = fullData[fullData['day'] == dt.date(2019, i, j)]
-        # Checks for holidays
-        if DayValues.empty:
-            continue
-        print(DayValues.head())
-        DayMaxValues = DayValues[DayValues['close'] == DayValues['close'].max()]
-        print(DayValues['close'].max())
-        DaySegments = []
-        endindex = DayValues.last_valid_index() + 1 - DayValues.index[0]
-        for idx in reversed(DayMaxValues.index):
-            temp = idx - DayValues.index[0]
-            print(DayValues.index)
-            print(DayValues.iloc[temp:endindex, :])
-            DaySegments.append(DayValues.iloc[temp:endindex, :])
-            endindex = temp
-        if endindex > 0:
-            # df.at[4, 'B']
-            print(DayValues.iloc[0:endindex, :])
-            DaySegments.append(DayValues.iloc[0:endindex, :])
-        for x in range(0, len(DaySegments)):
-            DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
-            DaySegments[x].plot(x = 'time', y = 'close', kind = 'line')
-            plt.savefig("test{:02d}_{:02d}_{:02d}.png".format(i, j, len(DaySegments) - x))
-            plt.close()
-            plt.plot_date(DaySegments[x]['time'], DaySegments[x]['close'])
-            plt.savefig("test{:02d}_{:02d}_{:02d}_scatter.png".format(i, j, len(DaySegments) - x))
-            plt.close()
+# for i in range(5, 11):
+#     fullData = importFile("19{:02d}hfp.csv".format(i))
+#     fullData = makeDate(fullData)
+#     updateDF(fullData)
+#     #     temp_sort = temp.sort_values('close', ascending=False)
+#     #     temp_sort.to_csv("test{:02d}sort.csv".format(i))
+#     #     temp.to_csv("test{:02d}.csv".format(i))
+#     #     Cycle through all the days in the month
+#     for j in range(1, cal.monthrange(2019, i)[1] + 1):
+#         # if weekend, skip to next day (doesn't catch holidays :'( )
+#         if (dt.date(2019, i, j).weekday() >= 5):
+#             continue
+#         print(dt.date(2019, i, j))
+#         DayValues = fullData[fullData['day'] == dt.date(2019, i, j)]
+#         # Checks for holidays
+#         if DayValues.empty:
+#             continue
+#         print(DayValues.head())
+#         DayMaxValues = DayValues[DayValues['close'] == DayValues['close'].max()]
+#         print(DayValues['close'].max())
+#         DaySegments = []
+#         endindex = DayValues.last_valid_index() + 1 - DayValues.index[0]
+#         for idx in reversed(DayMaxValues.index):
+#             temp = idx - DayValues.index[0]
+#             print(DayValues.index)
+#             print(DayValues.iloc[temp:endindex, :])
+#             DaySegments.append(DayValues.iloc[temp:endindex, :])
+#             endindex = temp
+#         if endindex > 0:
+#             # df.at[4, 'B']
+#             print(DayValues.iloc[0:endindex, :])
+#             DaySegments.append(DayValues.iloc[0:endindex, :])
+#         for x in range(0, len(DaySegments)):
+#             DaySegments[x].to_csv("test{:02d}_{:02d}_{:02d}.csv".format(i, j, len(DaySegments) - x))
+#             DaySegments[x].plot(x = 'time', y = 'close', kind = 'line')
+#             plt.savefig("test{:02d}_{:02d}_{:02d}.png".format(i, j, len(DaySegments) - x))
+#             plt.close()
+#             plt.plot_date(DaySegments[x]['time'], DaySegments[x]['close'])
+#             plt.savefig("test{:02d}_{:02d}_{:02d}_scatter.png".format(i, j, len(DaySegments) - x))
+#             plt.close()
             # plt.show()
             # print()
 
@@ -87,40 +99,86 @@ for i in range(5, 11):
 # May.to_csv('AfterImport.csv')
 
 # From this comment to the Comment labeled "STOP" does the segmentation on fakedate file
-# May = importFile("fakedata.csv")
-# May = makeDate(May)
-#
-# updateDF(May)
-#
-# May_Day1 = May[May['day'] == dt.date(2019, 5, 2)]
-# print(May_Day1.head())
-# print(May_Day1['close'].max())
-# May_Day1_Max = May_Day1[May_Day1['close']==May_Day1['close'].max()]
-# print(May_Day1_Max.head())
-#
-# Day1Segments = []
-# endindex = May_Day1.last_valid_index() - May_Day1.index[0]
-# for idx in reversed(May_Day1_Max.index):
-#     temp = idx - May_Day1.index[0]
-#     # print(endindex)
-#     # print(idx)
-#     # print(May_Day1_Max.at[idx, 'time'])
-#     print("{0}, {1}".format(temp, endindex))
-#     print(May_Day1.iloc[temp:endindex, :])
-#     print(May_Day1.iloc[0:200, :])
-#     # print(May_Day1.iloc[idx:endindex, :])
-#     Day1Segments.append(May_Day1.iloc[temp:endindex, :])
-#     endindex = temp - 1
-# print(endindex)
-# print(May_Day1.index[0])
-# print(May_Day1.index)
-# if endindex > 0:
-#     print(May_Day1.iloc[0:endindex, :])
-#     Day1Segments.append(May_Day1.iloc[0:endindex, :])
-#
-# print(Day1Segments[-1].head())
-# print(May_Day1['date'].iloc[-1])
-# print(May_Day1.last_valid_index())
+May = importFile("fakedata.csv")
+May = makeDate(May)
+
+updateDF(May)
+
+May_Day1 = May[May['day'] == dt.date(2019, 5, 2)]
+print(May_Day1.head())
+print(May_Day1['close'].max())
+May_Day1_Max = May_Day1[May_Day1['close']==May_Day1['close'].max()]
+print(May_Day1_Max.head())
+
+May_Day1.plot(x = 'time', y = 'close', kind = 'line')
+
+direction = 0
+numOfPoints = 0
+pointThreshold = 3
+maxStepThreshold = 0.5
+minStepThreshold = 0.1
+minPoints =[]
+maxPoints = []
+for index, row in May_Day1.iterrows():
+    # if we don't have a trend up or down (ie, just started), run this loop
+    if direction == 0:
+        # if we haven't increase or decrease from previous, just continue on (ie first element)
+        if May_Day1.at[index, 'diff'] == 0:
+            continue
+        # if we have changed from previous, use this to set the direction (ie second element)
+        else:
+            direction = setDirection(May_Day1.at[index, 'diff'])
+            continue
+    # if we are still going in the same direction (decreasing or increasing), add to the number of points and continue to next point
+    if checkDirection(direction, May_Day1.at[index, 'diff']):
+        numOfPoints += 1
+        continue
+    # if we don't, then check to see if we meet the qualifications for local min or max
+    else:
+        # if there is a big enough step to call a local min or max
+        if May_Day1.at[index, 'diff'] > maxStepThreshold:
+            pass
+        # if it is big enough to check
+        elif May_Day1.at[index, 'diff'] > minStepThreshold:
+            # if we have enough points to classify as min or max
+            if numOfPoints > pointThreshold:
+
+                pass
+            else:
+                numOfPoints = 2
+                direction = setDirection(May_Day1.at[index, 'diff'])
+                pass
+            pass
+        else:
+            # check to see if it continuews in the same direction after
+            if checkDirection(direction, May_Day1.at[index + 1, 'diff']):
+                # check to see if it continues in the same direction
+                pass
+
+
+Day1Segments = []
+endindex = May_Day1.last_valid_index() - May_Day1.index[0]
+for idx in reversed(May_Day1_Max.index):
+    temp = idx - May_Day1.index[0]
+    # print(endindex)
+    # print(idx)
+    # print(May_Day1_Max.at[idx, 'time'])
+    print("{0}, {1}".format(temp, endindex))
+    print(May_Day1.iloc[temp:endindex, :])
+    print(May_Day1.iloc[0:200, :])
+    # print(May_Day1.iloc[idx:endindex, :])
+    Day1Segments.append(May_Day1.iloc[temp:endindex, :])
+    endindex = temp - 1
+print(endindex)
+print(May_Day1.index[0])
+print(May_Day1.index)
+if endindex > 0:
+    print(May_Day1.iloc[0:endindex, :])
+    Day1Segments.append(May_Day1.iloc[0:endindex, :])
+
+print(Day1Segments[-1].head())
+print(May_Day1['date'].iloc[-1])
+print(May_Day1.last_valid_index())
 
 # "STOP"
 
