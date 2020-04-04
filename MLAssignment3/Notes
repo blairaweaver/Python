@@ -11,3 +11,47 @@ To Do
     plot learning rate and regularization params vs accuracy
 
     plot decision boundary? final model
+
+parfit
+
+Old Code snippits
+
+RandomForestClassifier(n_estimators=30, random_state=42), n_features_to_select=40
+
+7926404773744405
+
+# data_X_train, data_x_test, data_Y_train, data_y_test = train_test_split(X, y, test_size=0.20, shuffle=False)
+
+n_corret = sum(y_pred == data_y_test)
+print("Accuracy of the model using employment and education", n_corret/len(data_y_test))
+
+# print(list(data_dummies.columns))
+# print(data_dummies.info())
+# features = data_dummies.loc[:, 'age': 'country_Yugoslavia']
+# X = features.values
+# y = data_dummies['income_>50K'].values
+# data_X_train, data_x_test, data_Y_train, data_y_test = train_test_split(X, y, test_size=0.20)
+# print("X.shape: {} y.shape: {}".format(X.shape, y.shape))
+# clf = SGDClassifier(penalty='l2')
+# clf.fit(data_X_train, data_Y_train)
+# y_pred = clf.predict(data_x_test)
+# n_corret = sum(y_pred == data_y_test)
+# print(n_corret)
+# print(n_corret/len(data_y_test))
+
+# print(data.isnull().sum())
+# print(data.isnull().values.any())
+#
+# print(data_dummies.isnull().sum())
+# print(data_dummies.isnull().values.any())
+#
+# for i in np.where(data.applymap(lambda x: x == ' ')):
+#     print(i)
+#
+# print(len(data_dummies.columns))
+
+mask = select.get_support()
+plt.matshow(mask.reshape(1,-1), cmap='gray_r')
+plt.xlabel("Sample index")
+plt.yticks()
+plt.show()
